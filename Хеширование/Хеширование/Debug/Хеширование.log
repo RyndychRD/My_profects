@@ -1,4 +1,6 @@
 ﻿  Хеширование.cpp
-c:\users\roman\documents\visual studio 2015\projects\хеширование\хеширование\хеширование.cpp(111): warning C4018: <: несоответствие типов со знаком и без знака
-  Хеширование.vcxproj -> C:\Users\Roman\Documents\Visual Studio 2015\Projects\Хеширование\Debug\Хеширование.exe
-  Хеширование.vcxproj -> C:\Users\Roman\Documents\Visual Studio 2015\Projects\Хеширование\Debug\Хеширование.pdb (Full PDB)
+c:\users\roman\documents\с++\my_projects_since_2\хеширование\хеширование\хеширование.cpp(79): warning C4018: <: несоответствие типов со знаком и без знака
+c:\users\roman\documents\с++\my_projects_since_2\хеширование\хеширование\хеширование.cpp(128): warning C4018: <: несоответствие типов со знаком и без знака
+c:\users\roman\documents\с++\my_projects_since_2\хеширование\хеширование\хеширование.cpp(150): warning C4018: <: несоответствие типов со знаком и без знака
+  Хеширование.vcxproj -> C:\Users\Roman\Documents\с++\My_projects_since_2\Хеширование\Debug\Хеширование.exe
+  Хеширование.vcxproj -> C:\Users\Roman\Documents\с++\My_projects_since_2\Хеширование\Debug\Хеширование.pdb (Full PDB)
