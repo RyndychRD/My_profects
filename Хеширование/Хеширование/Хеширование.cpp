@@ -1,4 +1,4 @@
-// Õåøèðîâàíèå.cpp: îïðåäåëÿåò òî÷êó âõîäà äëÿ êîíñîëüíîãî ïðèëîæåíèÿ.
+// Ã•Ã¥Ã¸Ã¨Ã°Ã®Ã¢Ã Ã­Ã¨Ã¥.cpp: Ã®Ã¯Ã°Ã¥Ã¤Ã¥Ã«Ã¿Ã¥Ã² Ã²Ã®Ã·ÃªÃ³ Ã¢ÃµÃ®Ã¤Ã  Ã¤Ã«Ã¿ ÃªÃ®Ã­Ã±Ã®Ã«Ã¼Ã­Ã®Ã£Ã® Ã¯Ã°Ã¨Ã«Ã®Ã¦Ã¥Ã­Ã¨Ã¿.
 //
 
 #include "stdafx.h"
@@ -18,8 +18,8 @@ struct HeshCell {
 		this->cityNum = 0;
 		this->numTry = 0;
 	}
-     bool operator==(HeshCell a) {
-		 return ((this->cityName == a.cityName) && (this->cityNum == a.cityNum));
+	bool operator==(HeshCell a) {
+		return ((this->cityName == a.cityName) && (this->cityNum == a.cityNum));
 	}
 	HeshCell(string cityName, int unsigned cityNum, int unsigned numTry) {
 		this->cityName = cityName;
@@ -62,7 +62,7 @@ struct HeshTabl
 			+ numTry*numTry) % this->size);
 
 	}
-	//checked
+
 	void pushCell(HeshCell &cell) {
 		int unsigned numTry = 1;
 		int tempPos = heshing(cell.cityName, numTry);
@@ -73,14 +73,14 @@ struct HeshTabl
 		cell.numTry = numTry;
 		this->tabl[tempPos] = cell;
 		this->countCellIn++;
-		
+
 		double k = (double(this->countCellIn) / this->size) * 100;
 		if (k > this->fullness) {
 			cout << "Table overflow, showing overflowed table" << endl;
 			this->printTabl();
 			HeshTabl tempTabl(this->size * 3 + 1, fullness);
 			for (int i = 0; i < this->size; i++) {
-				if (!(this->tabl[i]==emptyCell)) {
+				if (!(this->tabl[i] == emptyCell)) {
 					tempTabl.pushCell(this->tabl[i]);
 				}
 			}
@@ -99,7 +99,7 @@ struct HeshTabl
 			numTry++;
 			tempPos = heshing(cityName, numTry);
 		}
-		if (this->tabl[tempPos].cityName == "") {
+		if (this->tabl[tempPos] == emptyCell) {
 			cout << cityName << " Not found" << endl;
 			HeshCell notFound;
 			return notFound;
@@ -110,13 +110,11 @@ struct HeshTabl
 	}
 
 	void deleteCell(string cityName) {
-		bool numDejavu = false;
 		HeshCell foundCell = popCell(cityName);
 		if (!(foundCell == emptyCell)) {
-			this->printTabl();
 			int tryNum = foundCell.numTry;
 			int tempCellNum = heshing(foundCell.cityName, tryNum);
-			int positionToDelete=tempCellNum;
+			int positionToDelete = tempCellNum;
 			if (this->tabl[heshing(foundCell.cityName, tryNum + 1)] == emptyCell) {
 				this->tabl[positionToDelete] = emptyCell;
 			}
@@ -127,51 +125,11 @@ struct HeshTabl
 				}
 				tryNum--;
 				int lastPos = heshing(foundCell.cityName, tryNum);
+				this->tabl[lastPos].numTry = this->tabl[positionToDelete].numTry;
 				this->tabl[positionToDelete] = this->tabl[lastPos];
 				this->tabl[lastPos] = emptyCell;
 			}
-			//int tryNum = foundCell.numTry;
-			//int previousPos = heshing(foundCell.cityName, tryNum);
-			//int tempPos = heshing(foundCell.cityName, tryNum+1);
-			//while (!(this->tabl[tempPos] == emptyCell)) {
-
-			//	this->tabl[previousPos] = this->tabl[tempPos];
-			//	previousPos = tempPos;
-			//	tryNum++;
-			//	tempPos = heshing(foundCell.cityName, tryNum);
-			//}
-			//
-			///*if (this->tabl[heshing(foundCell.cityName, tryNum - 2)].numTry > this->tabl[heshing(foundCell.cityName, tryNum-1)].numTry) {
-			//	this->tabl[heshing(foundCell.cityName, tryNum - 2)] = emptyCell;
-			//}
-			//else*/ {
-			//	this->tabl[heshing(foundCell.cityName, tryNum - 1)] = emptyCell;
-			//}
-				
-
-			/*
-			int tryNum = foundCell.numTry;
-			int previousPos = heshing(foundCell.cityName, tryNum);
-			int tempPos = heshing(foundCell.cityName, tryNum++);
-			while (this->tabl[tempPos].cityName != "") {
-				numDejavu = false;
-				if ((this->tabl[tempPos].numTry < tryNum)) {
-					numDejavu = true;
-				}
-					this->tabl[previousPos] = this->tabl[tempPos];
-					this->tabl[previousPos].numTry = tryNum-1;
-					previousPos = tempPos;
-					tempPos = heshing(foundCell.cityName, tryNum++);
-				
-			}
-			if (numDejavu) {
-				this->tabl[previousPos].cityName = " ";
-				this->tabl[previousPos].cityNum = 0;
-				this->tabl[previousPos].numTry = 0;
-			}
-			else {
-				this->tabl[previousPos] = emptyCell;*/
-	//		}
+			
 		}
 
 	}
@@ -195,7 +153,6 @@ struct HeshTabl
 
 int main()
 {
-	ifstream fin("cityToHesh.txt");
 	int tablSize = 10;
 	int fullness = 70;
 	int unsigned temp = 1;
@@ -203,7 +160,7 @@ int main()
 
 	string s = "AAXoooooo";
 
-	for (int i = 1; i < 11; i++) {
+	for (int i = 1; i < 25; i++) {
 		HeshCell cellTemp(s, 10 * i, 0);
 		grandTabl.pushCell(cellTemp);
 		s[0]++;
@@ -215,17 +172,17 @@ int main()
 
 
 
-	s = "FASoooooo";
-	for (int i = 1; i < 11; i++) {
+	s = "AAXoooooo";
+	for (int i = 1; i < 13; i++) {
 
-		//if (i % 2 == 0) 
+	//	if (i % 2 == 0) 
 		{
 			cout << s << endl;
 			grandTabl.deleteCell(s);
 			//grandTabl.printTabl();
 		}
-		s[0]--;
-		s[2]++;
+		s[0]++;
+		s[2]--;
 	}
 
 
@@ -235,5 +192,3 @@ int main()
 
 	return 0;
 }
-
-
