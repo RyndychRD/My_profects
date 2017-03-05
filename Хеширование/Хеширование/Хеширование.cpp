@@ -18,6 +18,9 @@ struct HeshCell {
 		this->cityNum = 0;
 		this->numTry = 0;
 	}
+     bool operator==(HeshCell a) {
+		 return ((this->cityName == a.cityName) && (this->cityNum == a.cityNum));
+	}
 	HeshCell(string cityName, int unsigned cityNum, int unsigned numTry) {
 		this->cityName = cityName;
 		this->cityNum = cityNum;
@@ -32,6 +35,8 @@ struct HeshCell {
 
 struct HeshTabl
 {
+
+	const HeshCell emptyCell;
 	unsigned int fullness;
 	unsigned int countCellIn = 0;
 	HeshCell *tabl;
@@ -61,23 +66,21 @@ struct HeshTabl
 	void pushCell(HeshCell &cell) {
 		int unsigned numTry = 1;
 		int tempPos = heshing(cell.cityName, numTry);
-		while (this->tabl[tempPos].cityName != "") {
+		while (!(this->tabl[tempPos] == emptyCell)) {
 			numTry++;
 			tempPos = heshing(cell.cityName, numTry);
 		}
 		cell.numTry = numTry;
 		this->tabl[tempPos] = cell;
 		this->countCellIn++;
-		if (numTry >= 17) {
-			cout << "";
-		}
+		
 		double k = (double(this->countCellIn) / this->size) * 100;
 		if (k > this->fullness) {
 			cout << "Table overflow, showing overflowed table" << endl;
 			this->printTabl();
 			HeshTabl tempTabl(this->size * 3 + 1, fullness);
 			for (int i = 0; i < this->size; i++) {
-				if (!(tabl[i].cityName.empty())) {
+				if (!(this->tabl[i]==emptyCell)) {
 					tempTabl.pushCell(this->tabl[i]);
 				}
 			}
@@ -109,23 +112,50 @@ struct HeshTabl
 	void deleteCell(string cityName) {
 		bool numDejavu = false;
 		HeshCell foundCell = popCell(cityName);
-		HeshCell emptyCell;
-		if (foundCell.numTry != 0) {
+		if (!(foundCell == emptyCell)) {
+			this->printTabl();
+			int tryNum = foundCell.numTry;
+			int tempCellNum = heshing(foundCell.cityName, tryNum);
+			int positionToDelete=tempCellNum;
+			if (this->tabl[heshing(foundCell.cityName, tryNum + 1)] == emptyCell) {
+				this->tabl[positionToDelete] = emptyCell;
+			}
+			else {
+				while (!(this->tabl[tempCellNum] == emptyCell)) {
+					tryNum++;
+					tempCellNum = heshing(foundCell.cityName, tryNum);
+				}
+				tryNum--;
+				int lastPos = heshing(foundCell.cityName, tryNum);
+				this->tabl[positionToDelete] = this->tabl[lastPos];
+				this->tabl[lastPos] = emptyCell;
+			}
+			//int tryNum = foundCell.numTry;
+			//int previousPos = heshing(foundCell.cityName, tryNum);
+			//int tempPos = heshing(foundCell.cityName, tryNum+1);
+			//while (!(this->tabl[tempPos] == emptyCell)) {
+
+			//	this->tabl[previousPos] = this->tabl[tempPos];
+			//	previousPos = tempPos;
+			//	tryNum++;
+			//	tempPos = heshing(foundCell.cityName, tryNum);
+			//}
+			//
+			///*if (this->tabl[heshing(foundCell.cityName, tryNum - 2)].numTry > this->tabl[heshing(foundCell.cityName, tryNum-1)].numTry) {
+			//	this->tabl[heshing(foundCell.cityName, tryNum - 2)] = emptyCell;
+			//}
+			//else*/ {
+			//	this->tabl[heshing(foundCell.cityName, tryNum - 1)] = emptyCell;
+			//}
+				
+
+			/*
 			int tryNum = foundCell.numTry;
 			int previousPos = heshing(foundCell.cityName, tryNum);
 			int tempPos = heshing(foundCell.cityName, tryNum++);
 			while (this->tabl[tempPos].cityName != "") {
-				/*if ((this->tabl[tempPos].numTry < tryNum)) {
-					this->tabl[previousPos] = this->tabl[tempPos];
-					this->tabl[previousPos].numTry = --tryNum;
-					previousPos = tempPos;
-					this->tabl[previousPos] = emptyCell;
-					this->tabl[tempPos].numTry = --tryNum;
-				}
-				else {
-				*/
 				numDejavu = false;
-				if ((this->tabl[tempPos].numTry < tryNum)||(tempPos=previousPos)) {
+				if ((this->tabl[tempPos].numTry < tryNum)) {
 					numDejavu = true;
 				}
 					this->tabl[previousPos] = this->tabl[tempPos];
@@ -136,10 +166,12 @@ struct HeshTabl
 			}
 			if (numDejavu) {
 				this->tabl[previousPos].cityName = " ";
+				this->tabl[previousPos].cityNum = 0;
+				this->tabl[previousPos].numTry = 0;
 			}
 			else {
-				this->tabl[previousPos] = emptyCell;
-			}
+				this->tabl[previousPos] = emptyCell;*/
+	//		}
 		}
 
 	}
@@ -160,9 +192,7 @@ struct HeshTabl
 
 
 };
-//переделать инт в номере на стринг
-//сделать проверку на колво символов в названии города>3
-//сделать проверку на вводисое название = город + номер
+
 int main()
 {
 	ifstream fin("cityToHesh.txt");
@@ -185,16 +215,17 @@ int main()
 
 
 
-	s = "AAXoooooo";
+	s = "FASoooooo";
 	for (int i = 1; i < 11; i++) {
 
-		if (i % 2 == 0) {
+		//if (i % 2 == 0) 
+		{
 			cout << s << endl;
 			grandTabl.deleteCell(s);
-			//	grandTabl.printTabl();
+			//grandTabl.printTabl();
 		}
-		s[0]++;
-		s[2]--;
+		s[0]--;
+		s[2]++;
 	}
 
 
