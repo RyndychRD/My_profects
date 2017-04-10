@@ -10,7 +10,8 @@ function <int(int,float)> gen f(){return &f}
  
  лямбда функция(безымянная)
  int func(int i){return i}
- f(int agr1,func(int i)) --> f(int agr1,[](int(i))->int{return i})
+ int a;
+ f(int agr1,func(int i)) --> f(int agr1,[a](int(i))->int{return i+a}) //чтобы использовалась именно а вне реализации лямбда функции
  
  замыкание
  
