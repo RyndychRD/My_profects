@@ -21,3 +21,5 @@ callback
 map
 reduce
 filter
+
+typedef
