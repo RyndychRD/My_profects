@@ -18,3 +18,6 @@ function <int(int,float)> gen f(){return &f}
 callback
 
 функция высшего порядка - которая принимает в качестве аргумента или возвращает другую функцию 
+map
+reduce
+filter
