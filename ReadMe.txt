@@ -5,3 +5,12 @@ return (int(b))+a
 int (*f)(int,float)=&f;
 cout<<f(5,7.2)
 
+функция возвращает ссылку на др функцию
+function <int(int,float)> gen f(){return &f}
+ 
+ лямбда функция(безымянная)
+ int func(int i){return i}
+ f(int agr1,func(int i)) --> f(int agr1,[](int(i))->int{return i})
+ 
+ замыкание
+ 
