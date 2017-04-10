@@ -14,3 +14,4 @@ function <int(int,float)> gen f(){return &f}
  
  замыкание
  
+callback
