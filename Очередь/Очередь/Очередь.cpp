@@ -26,6 +26,7 @@ bool operator==(ElementLine &temp, ElementLine &temp1) {
 
 
 class LineWithPrior {
+public:
 	unsigned int head;
 	unsigned int tail;
 	unsigned int size;
@@ -52,7 +53,6 @@ class LineWithPrior {
 		return pos;
 	}
 
-public:
 	ElementLine *line;
 	ElementLine Nul;
 
@@ -77,11 +77,17 @@ public:
 	~LineWithPrior() {
 		delete[]this->line;
 	}
-	void showHead() {
-		cout << head << endl;
+	int showHead() {
+		return head;
 	}
-	void showTail() {
-		cout << tail << endl;
+	void setHead(int headIn) {
+		this->head = headIn;
+	}
+	int showTail() {
+		return tail;
+	}
+	void setTail(int tailIn) {
+		this->tail = tailIn;
 	}
 	ElementLine getEl(int elPos) {
 		if (elPos = -1) {
@@ -180,14 +186,47 @@ public:
 		}
 	}
 
-	LineWithPrior makeEq(LineWithPrior &temp) {
-		return temp;
+	LineWithPrior &operator=(LineWithPrior &temp) {
+		delete[]this->line;
+		this->line = new ElementLine[this->size + 1];
+		this->line[0] = Nul;
+		if ((this != &temp)&&(temp.size>0)) {
+			this->head = 0;
+			this->tail = 0;
+			unsigned int i = temp.head;
+			int count = 0;
+			while((count < this->size) && ((count == 0) || (i != temp.tail))){
+				this->line[this->tail].element = temp.line[i].element;
+				this->line[this->tail].prioritet = temp.line[i].prioritet;
+				incPos(this->tail);
+				incPos(i);
+				count++;
+
+			}
+		}
+		return *this;
 	}
+	friend bool operator==(LineWithPrior temp1, LineWithPrior temp2);
+
 };
+bool operator ==(LineWithPrior temp1, LineWithPrior temp2) {
+	bool flag = true;
+	unsigned int i = temp1.showHead();
+	unsigned int j = temp2.showHead();
+
+	while ((temp1.getEl(i) == temp2.getEl(j))&&(i!=temp1.tail)) {
+		temp1.incPos(i);
+		temp1.incPos(j);
+	}
+	if (i != temp1.showTail()) {
+		return false;
+	}
+	return true;
+
+}
 
 //rewrite with class func
-	/*bool operator==(LineWithPrior &temp1, LineWithPrior &temp2) {
-		bool flagEqual = true;
+	/*bool flagEqual = true;
 		int i = temp1.head;
 		int j = temp2.head;
 		while((i < temp1.tail) && (j < temp2.tail)){
@@ -200,14 +239,16 @@ public:
 int main()
 {
 	LineWithPrior line2(10);
-	LineWithPrior line1(5);
+	LineWithPrior line1(12);
 	for (int i = 1; i <= 11; i++) {
 		line1.addElement(i * 10, i);
 		line2.addElement(i * 2, i);
 	}
-	line2.makeEq(line1);
 	line1.PrintLn();
 	line2.PrintLn();
+	if (line1 == line2) {
+		cout << "yes";
+	}
 
 
 	//copy constr checked
