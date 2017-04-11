@@ -58,7 +58,7 @@ struct HeshTabl
 	}
 	int heshing(string cityName, int unsigned numTry) {
 		numTry--;
-		return (((((int)(cityName[0]) + (int)(cityName[1]) + (int)(cityName[2])))
+		return (((((int)(cityName[0]) + (int)(cityName[1])*2 + (int)(cityName[2])*3))
 			+ numTry*numTry) % this->size);
 
 	}
@@ -67,6 +67,9 @@ struct HeshTabl
 		int unsigned numTry = 1;
 		int tempPos = heshing(cell.cityName, numTry);
 		while (!(this->tabl[tempPos] == emptyCell)) {
+			if (cell.cityName == this->tabl[tempPos].cityName) {
+				return ;
+			}
 			numTry++;
 			tempPos = heshing(cell.cityName, numTry);
 		}
@@ -160,11 +163,11 @@ int main()
 
 	string s = "AAXoooooo";
 
-	for (int i = 1; i < 25; i++) {
+	for (int i = 1; i < 10; i++) {
 		HeshCell cellTemp(s, 10 * i, 0);
 		grandTabl.pushCell(cellTemp);
-		s[0]++;
-		s[2]--;
+		s[0]+=1;
+		s[2]-=1;
 	}
 
 
@@ -172,7 +175,7 @@ int main()
 
 
 
-	s = "AAXoooooo";
+	s = "LAMoooooo";
 	for (int i = 1; i < 13; i++) {
 
 	//	if (i % 2 == 0) 
@@ -181,8 +184,25 @@ int main()
 			grandTabl.deleteCell(s);
 			//grandTabl.printTabl();
 		}
-		s[0]++;
-		s[2]--;
+		s[0]-=2;
+		s[2]+=2;
+	}
+
+	
+	grandTabl.printTabl();
+
+
+	cout << endl << endl;
+	s = "LAMoooooo";
+	for (int i = 1; i < 13; i++) {
+
+		//	if (i % 2 == 0) 
+		{
+			HeshCell cellTemp(s, 10 * i, 0);
+			grandTabl.pushCell(cellTemp);
+		}
+		s[0] -= 1;
+		s[2] += 1;
 	}
 
 

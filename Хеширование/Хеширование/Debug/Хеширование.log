@@ -1,5 +1,5 @@
 ﻿  Хеширование.cpp
-c:\users\roman\documents\с++\my_projects_since_2\хеширование\хеширование\хеширование.cpp(82): warning C4018: <: несоответствие типов со знаком и без знака
-c:\users\roman\documents\с++\my_projects_since_2\хеширование\хеширование\хеширование.cpp(182): warning C4018: <: несоответствие типов со знаком и без знака
-  Хеширование.vcxproj -> C:\Users\Roman\Documents\с++\My_projects_since_2\Хеширование\Debug\Хеширование.exe
-  Хеширование.vcxproj -> C:\Users\Roman\Documents\с++\My_projects_since_2\Хеширование\Debug\Хеширование.pdb (Full PDB)
+c:\users\roman\documents\c++\my_projects_since_2\хеширование\хеширование\хеширование.cpp(85): warning C4018: <: несоответствие типов со знаком и без знака
+c:\users\roman\documents\c++\my_projects_since_2\хеширование\хеширование\хеширование.cpp(143): warning C4018: <: несоответствие типов со знаком и без знака
+  Хеширование.vcxproj -> C:\Users\Roman\Documents\c++\My_projects_since_2\Хеширование\Debug\Хеширование.exe
+  Хеширование.vcxproj -> C:\Users\Roman\Documents\c++\My_projects_since_2\Хеширование\Debug\Хеширование.pdb (Full PDB)

@@ -1,0 +1,6 @@
+﻿  Base64.cpp
+c:\users\roman\documents\c++\my_projects_since_2\base64\base64\base64.cpp(45): warning C4018: <: несоответствие типов со знаком и без знака
+c:\users\roman\documents\c++\my_projects_since_2\base64\base64\base64.cpp(61): warning C4018: <: несоответствие типов со знаком и без знака
+c:\users\roman\documents\c++\my_projects_since_2\base64\base64\base64.cpp(41): warning C4715: asciiToBase64: значение возвращается не при всех путях выполнения
+  Base64.vcxproj -> C:\Users\Roman\Documents\c++\My_projects_since_2\Base64\Debug\Base64.exe
+  Base64.vcxproj -> C:\Users\Roman\Documents\c++\My_projects_since_2\Base64\Debug\Base64.pdb (Full PDB)
