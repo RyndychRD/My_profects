@@ -27,3 +27,6 @@ typedef
 winapi - оконные приложения в С++
 https://msdn.microsoft.com/ru-ru/library/bb384843
 https://habrahabr.ru/post/164193/
+библиотеки windows.h
+           stdio.h
+           string
