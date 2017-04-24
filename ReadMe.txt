@@ -32,3 +32,5 @@ https://habrahabr.ru/post/164193/
            string
 
 throw exeptiom
+
+тернарный оператор
