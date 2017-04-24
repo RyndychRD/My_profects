@@ -30,3 +30,5 @@ https://habrahabr.ru/post/164193/
 библиотеки windows.h
            stdio.h
            string
+
+throw exeptiom
