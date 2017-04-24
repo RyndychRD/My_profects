@@ -23,3 +23,5 @@ reduce
 filter
 
 typedef
+
+winapi - оконные приложения в С++
