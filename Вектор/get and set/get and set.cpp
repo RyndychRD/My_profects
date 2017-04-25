@@ -1,4 +1,4 @@
-// get and set.cpp: определяет точку входа для консольного приложения.
+// get and set.cpp: Г®ГЇГ°ГҐГ¤ГҐГ«ГїГҐГІ ГІГ®Г·ГЄГі ГўГµГ®Г¤Г  Г¤Г«Гї ГЄГ®Г­Г±Г®Г«ГјГ­Г®ГЈГ® ГЇГ°ГЁГ«Г®Г¦ГҐГ­ГЁГї.
 //
 
 #include "stdafx.h"
@@ -58,8 +58,9 @@ int main()
 	cout << r1.getSquare()<<endl;
 	Circle r2(r);
 	cout << r2.getSquare() << endl;
+	Square r3;
 	Shape *c;
-	c = &r2;
+	c = &r3;
 	cout << c->getSquare() << endl;
 
 	system("pause");
