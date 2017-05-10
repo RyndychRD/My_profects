@@ -159,94 +159,99 @@ struct Line2Word {
 		return temp;
 	}
 	
-	Line2Word copy(Line2Word &line, const int pos, const int kolvo) {
-		Line2Word result;
-		bool resultExist = true;
-		Cell *temp = line.start;
-		int tempPos = pos;
-		Cell *posStart = temp;
-		Cell *posFinish;
-		while (temp != NULL&&tempPos > 0) {
-			tempPos -= temp->length();
-			tempPos < 0 ? posStart = temp : false;
+	bool copy(Line2Word &line, const int pos, const int kolvo) {
+		//подумать над переприсваиванием строки
+		if (this->start == line.start||line.start==NULL||pos<0||kolvo<0||pos>(int)line.length()) { 
+			return false;
 		}
-		if (temp == NULL) {
-			posStart = temp;
-		}
-		int tempKolvo = tempPos + kolvo;
-		temp = posStart;
-		posFinish = temp;
-		while (temp != NULL&&tempKolvo > 0) {
-			tempKolvo -= temp->length();
-			tempKolvo < 0 ? posFinish = temp : false;
-		}
+			this->~Line2Word();
+			this->start = new Cell;
+			Cell *temp = line.start;
+			int tempPos = pos;
+			Cell *posStart = temp;
+			Cell *posFinish;
+			
+			while (temp != NULL&&tempPos >= 0) {
+				tempPos -= temp->length();
+				tempPos < 0 ? posStart = temp : temp=temp->nxt;
+			}
+	
+			int tempKolvo = tempPos + kolvo;
+			temp = posStart;
+			while (temp != NULL&&tempKolvo > 0) {
+				tempKolvo < 0 ? posFinish = temp : temp = temp->nxt;
+				tempKolvo -= temp->length();
+			} ;
+			posFinish = temp;
 
+			if (tempPos < 0 && tempKolvo < 0) {
+				tempPos += posStart->length();
+				Cell addFirst(posStart);
+				bool active = true;
+				//боже, помоги мне это забыть
+				//добавил первую клетку
+				if (tempPos <= addFirst.countSpaceBefore1) {
+					addFirst.countSpaceBefore1 -= tempPos;
+					active = false;
+				}
+				if ((tempPos <= addFirst.countSpaceBefore1 + (int)addFirst.firstWord.length()) && active) {
+					tempPos -= addFirst.countSpaceBefore1;
+					addFirst.countSpaceBefore1 = 0;
+					addFirst.firstWord = addFirst.firstWord.substr(tempPos, addFirst.firstWord.length());
+					active = false;
+				}
+				if ((tempPos <= addFirst.countSpaceBefore1 + (int)addFirst.firstWord.length() + addFirst.countSpaceBefore2) && active) {
+					addFirst.freeSpace1Word = true;
+					addFirst.countSpaceBefore2 -= tempPos - addFirst.countSpaceBefore1 - addFirst.firstWord.length();
+					active = false;
+				}
+				if (active) {
+					addFirst.freeSpace1Word = true;
+					tempPos -= addFirst.length() + addFirst.secondWord.length();
+					addFirst.countSpaceBefore2 = 0;
+					addFirst.secondWord = addFirst.secondWord.substr(tempPos, addFirst.secondWord.length());
+				}
+				addFirst.nxt = NULL;
+				this->add(addFirst);
 
-		if (tempPos < 0 && tempKolvo < 0) {
-			tempPos += posStart->length();
-			tempKolvo += posFinish->length();
-			Cell addFirst(posStart);
-			bool active = true;
-			//боже, помоги мне это забыть
-			//добавил первую клетку
-			if (tempPos <= addFirst.countSpaceBefore1) {
-				addFirst.countSpaceBefore1 -= tempPos;
-				active = false;
-			} 			
-			if (tempPos <= addFirst.countSpaceBefore1 + addFirst.firstWord.length()&&active) {
-				tempPos -= addFirst.countSpaceBefore1;
-				addFirst.countSpaceBefore1 = 0;
-				addFirst.firstWord.substr(tempPos, addFirst.firstWord.length());
-				active = false;
-			}
-			if (tempPos <= addFirst.countSpaceBefore1 + addFirst.firstWord.length() + addFirst.countSpaceBefore2&&active) {
-				addFirst.freeSpace1Word = true;
-				addFirst.countSpaceBefore2 -= tempPos - addFirst.countSpaceBefore1 - addFirst.firstWord.length();
-				active = false;
-			}
-			if (active) {
-				addFirst.freeSpace1Word = true;
-				tempPos -= addFirst.length() + addFirst.secondWord.length();
-				addFirst.countSpaceBefore2 =0;
-				addFirst.secondWord.substr(tempPos, addFirst.secondWord.length());
-			}
-			result.add(addFirst);
+				//добавил промежуток
+				temp = posStart->nxt;
+				while (temp != posFinish&&posFinish != posStart) {
+					this->add(temp);
+					temp = temp->nxt;
+				}
 
-			//добавил промежуток
-			temp = posStart->nxt;
-			while (temp != posFinish&&posFinish != posStart) {
-				result.add(temp);
-				temp = temp->nxt;
-			}
+				//добавил последнюю
+				posStart != posFinish ? this->add(posFinish) : false;
+				active = true;
+				Cell *addLast = this->last();
+				tempKolvo = abs(tempKolvo);
+				int lengthFirst = addLast->firstWord.length();
+				int lengthSecond = addLast->secondWord.length();
 
-			//добавил последнюю
-			//доделать последнюю
-			posStart!=posFinish?result.add(posFinish):false;
-			active = true;
-			if (tempKolvo < result.last()->countSpaceBefore1) {
-				result.last()->countSpaceBefore1 -= tempKolvo;
-				active = false;
+				if (tempKolvo <= lengthSecond) {
+					addLast->secondWord = addLast->secondWord.substr(0, lengthSecond - tempKolvo);
+					active = false;
+				}
+				if (tempKolvo <= addLast->countSpaceBefore2 + lengthSecond && active) {
+					tempKolvo -= lengthSecond;
+					addLast->countSpaceBefore2 -= tempKolvo;
+					active = false;
+				}
+				if (tempKolvo <= lengthFirst + lengthSecond + addLast->countSpaceBefore2&&active) {
+					addLast->freeSpace2Word = true;
+					tempKolvo -= lengthSecond + addLast->countSpaceBefore2;
+					addLast->firstWord = addLast->firstWord.substr(0, lengthFirst - tempKolvo);
+					active = false;
+				}
+				if (active) {
+					addLast->freeSpace2Word = true;
+					addLast->firstWord = "";
+					tempKolvo -= lengthFirst + lengthSecond + addLast->countSpaceBefore2;
+					addLast->countSpaceBefore1 -= tempKolvo;
+				}
+				this->add(addLast);
 			}
-			if (tempKolvo <= addLast.countSpaceBefore1 + addLast.firstWord.length() && active) {
-				tempKolvo -= addLast.countSpaceBefore1;
-				addLast.countSpaceBefore1 = 0;
-				addLast.firstWord.substr(tempKolvo, addLast.firstWord.length());
-				active = false;
-			}
-			if (tempKolvo <= addLast.countSpaceBefore1 + addLast.firstWord.length() + addLast.countSpaceBefore2&&active) {
-				addLast.freeSpace1Word = true;
-				addLast.countSpaceBefore2 -= tempKolvo - addLast.countSpaceBefore1 - addLast.firstWord.length();
-				active = false;
-			}
-			if (active) {
-				addLast.freeSpace1Word = true;
-				tempKolvo -= addLast.length() + addLast.secondWord.length();
-				addLast.countSpaceBefore2 = 0;
-				addLast.secondWord.substr(tempKolvo, addLast.secondWord.length());
-			}
-			result.add(addLast);
-		}
-		return result;
 	};
 
 	void printAll() {
@@ -254,16 +259,16 @@ struct Line2Word {
 		//rewrite
 		do {
 			if (!temp->freeSpace1Word) {
-				cout << temp->firstWord << temp->freeSpace1Word << endl;
+				cout << temp->firstWord << temp->freeSpace1Word <<" ";
 			}
 			if (!temp->freeSpace2Word) {
-				cout << temp->secondWord << temp->freeSpace2Word << endl;
+				cout << temp->secondWord << temp->freeSpace2Word << " ";
 			}
 			if (temp->firstWord[0] == (char)1) {
-				cout << temp->freeSpace1Word << endl;
+				cout << temp->freeSpace1Word << " ";
 			}
 			if (temp->secondWord[0] == (char)1) {
-				cout << temp->freeSpace1Word << endl;
+				cout << temp->freeSpace1Word << " ";
 			}
 			temp = temp->nxt;
 		} while (temp != NULL);
@@ -276,9 +281,10 @@ struct Line2Word {
 int main()
 {
 	Line2Word line1,line2;
-	string temp = "Firstword   asdasd fg sdkufh aesfg sdfg";
+	string temp = "Firstword 1234 56789 0abcd efghi";
+	line2.add(temp);
 	line1.add(temp);
-	line1.copy(line1, 1, 3);
+	line1.copy(line2, 0, 15);
 	line1.printAll();
 	system("pause");
 	return 0;
