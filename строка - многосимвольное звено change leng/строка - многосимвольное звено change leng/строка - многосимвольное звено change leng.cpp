@@ -269,6 +269,7 @@ public:
 			string stringWholeTempFinishCell = convertCellToString(posFinish);
 			stringWholeTempFinishCell = stringWholeTempFinishCell.substr(0, stringWholeTempFinishCell.length() - tempKolvo);
 			this->add(stringWholeTempFinishCell);
+		return true;
 		}
 	};
 	int searching(string line, int posStart) {
