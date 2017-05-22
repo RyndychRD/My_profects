@@ -64,17 +64,20 @@ class Line2Word {
 	bool addWord(const int spaceBeforeWord, string word, Cell &cell) {
 		if (cell.freeSpace1Word) {
 			cell.firstWord = word;
-			cell.countSpaceBefore1 = spaceBeforeWord;
+			cell.countSpaceBefore1 += spaceBeforeWord;
 			cell.freeSpace1Word = false;
-			//word[0] == emptySimb ? cell.freeSpace1Word = true : cell.freeSpace1Word = false;
+			word[0] == emptySimb ? cell.freeSpace1Word = true : cell.freeSpace1Word = false;
 			cell.full = !(cell.freeSpace1Word || cell.freeSpace2Word);
 			return true;
 		}
 		if (cell.freeSpace2Word) {
+		/*	if (word[0] == char(1)) {
+				word = "";
+			}*/
 			cell.secondWord = word;
-			cell.countSpaceBefore2 = spaceBeforeWord;
+			cell.countSpaceBefore2 += spaceBeforeWord;
 			cell.freeSpace2Word = false;
-		 	//word[0] == emptySimb ? cell.freeSpace2Word = true : cell.freeSpace2Word = false;
+		 	word[0] == emptySimb ? cell.freeSpace2Word = true : cell.freeSpace2Word = false;
 			cell.full = !(cell.freeSpace1Word || cell.freeSpace2Word);
 			return true;
 		}
@@ -269,7 +272,6 @@ public:
 			string stringWholeTempFinishCell = convertCellToString(posFinish);
 			stringWholeTempFinishCell = stringWholeTempFinishCell.substr(0, stringWholeTempFinishCell.length() - tempKolvo);
 			this->add(stringWholeTempFinishCell);
-		return true;
 		}
 	};
 	int searching(string line, int posStart) {
@@ -397,11 +399,17 @@ void searchAndReplace(Line2Word &line, Line2Word lineToFound, Line2Word lineToSw
 
 int main()
 {
-	Line2Word line1="true true true true  true true true true";
+	Line2Word line1="t1rue t2rue t3rue t4rue  t5rue t6rue t7rue t8rue";
 	string tmp = "12345 v765432";
-	Line2Word temp ("_xchvfdihv true true true true  true true true true");
-	Line2Word find (" true true true true  true true true true ");
-	(tmp + line1).printAll();
+	Line2Word temp (" ");
+	Line2Word find (" t");
+	searchAndReplace(line1, find, temp);
+	line1.printAll();
+	temp = " t";
+	find = " ";
+	searchAndReplace(line1, find, temp);
+	line1.printAll();
+
 	//search from pos
 	system("pause");
 	return 0;
