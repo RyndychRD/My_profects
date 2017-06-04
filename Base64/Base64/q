@@ -1,0 +1,105 @@
+
+#include "stdafx.h"
+#include <string.h>
+#include <bitset>
+#include <iostream>
+using namespace std;
+const char base64[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+						'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+						'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+						'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+						'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+						's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+						'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+						'+', '/','=' };
+const char pad = '=';
+char NumToBase64(long chrNum) {
+
+	if (chrNum < 64 && chrNum >= 0) {
+		return base64[chrNum];
+	}
+	return pad;
+}
+int base64ToNum(char baseChar) {
+	for (int i = 0; i < 64; i++) {
+		if (base64[i] == baseChar) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+int countToUpdateStr(string inStr) {
+	int count = 0;
+	int length = inStr.length();
+	while ((length *8 % 6) != 0) {
+		count++;
+		length++;
+	}
+	return count;
+}
+
+string convert(string inStr,int count) {
+	string result;
+	for (int i = 0; i < inStr.length(); i++) {
+		bitset<8> charByte(inStr[i]);
+		result += charByte.to_string();
+	}
+	for (int i = 0; i < count; i++) {
+		result += "00000000";
+	}
+	return result;
+}
+string codeBit6(string bitStr) {
+	string result;
+	bitset<6> bit6;
+	for (int i = 0; i < bitStr.length(); i++) {
+		if ((i != 0) && (i % 6 == 0)) {
+			result += NumToBase64(bit6.to_ulong());
+			bit6.reset();
+		}
+		bit6.set(i % 6, bitStr[i] == '1');
+		
+	}
+	return result;
+}
+
+string addPad(string outStr, int count) {
+	int length = outStr.length();
+	if (count == 2) {
+		outStr[length] = '=';
+		outStr[length - 1] = '=';
+	}
+	if (count == 1) {
+		outStr[length] = '=';
+	}
+	return outStr;
+}
+
+string codeBase64(string inStr) {
+	string outStr;
+	string tempBitStr;
+	int countUpdateSimb = 0;
+	countUpdateSimb = countToUpdateStr(inStr);
+	tempBitStr = convert(inStr,countUpdateSimb);
+	outStr=codeBit6(tempBitStr);
+	outStr = addPad(outStr, countUpdateSimb);
+	return outStr;
+}
+string decodeBase64(string &inStr) {
+	//what if not enough base64 simb
+	string outStr;
+	return outStr;
+}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+
+	string inStr = "b";
+	cout << codeBase64(inStr);
+	//system("pause");
+	
+	system("pause");
+	return 0;
+}
